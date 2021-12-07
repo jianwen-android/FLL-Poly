@@ -1,161 +1,113 @@
 #!/usr/bin/env pybricks-micropython
-import time
+from time import sleep
+import asyncio
 
-from pybricks.ev3devices import (ColorSensor, GyroSensor, InfraredSensor,
-                                 Motor, TouchSensor, UltrasonicSensor)
-from pybricks.hubs import EV3Brick
-from pybricks.media.ev3dev import Font, ImageFile, SoundFile
-from pybricks.parameters import Button, Color, Direction, Port, Stop
-from pybricks.robotics import DriveBase
-from pybricks.tools import DataLog, StopWatch, wait
-
-# Create your objects here.
-big_font = Font(size=18, bold=True)
-ev3 = EV3Brick()
-last_error = 0
+from ev3dev2.display import Display
+from ev3dev2.motor import LargeMotor, MediumMotor,OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, MoveTank, SpeedPercent
+from ev3dev2.port import LegoPort
+from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4, ColorSensor
 
 # Motors
-leftMotor = Motor(Port.C)
-rightMotor = Motor(Port.B)
-rightMedMotor = Motor(Port.A)
-leftMedMotor = Motor(Port.D)
+leftMotor = LargeMotor(OUTPUT_B)
+rightMotor = LargeMotor(OUTPUT_C)
+rightMedMotor = MediumMotor(OUTPUT_A)
+leftMedMotor = MediumMotor(OUTPUT_D)
+
+# Tank drives
+main_drive = MoveTank(leftMotor, rightMotor)
+secondary_drive = MoveTank(leftMedMotor, rightMedMotor)
 
 # Sensors
-rightSensor = ColorSensor(Port.S1)
-middleSensor = ColorSensor(Port.S2)
-leftSensor = ColorSensor(Port.S3)
-buttonSensor = TouchSensor(Port.S4)
-ev3.speaker.set_volume(20, which='Beep')
-ev3.speaker.set_volume(100, which='PCM')
-ev3.speaker.set_speech_options(language='en', voice='m2', speed=180, pitch=50)
+leftSensor = ColorSensor(INPUT_1)
+middleSensor = ColorSensor(INPUT_2)
+rightSensor = ColorSensor(INPUT_3)
 
 # Functions
-def MoveToAngle(leftAngle, rightAngle, leftSpeed, rightSpeed):
-    leftMotor.reset_angle(0)
-    rightMotor.reset_angle(0)
-    leftMotor.run(leftSpeed)
-    rightMotor.run(rightSpeed)
-    while (abs(leftMotor.angle()) < abs(leftAngle)) or (abs(rightMotor.angle()) < abs(rightAngle)):
-        if abs(rightMotor.angle()) >= abs(rightAngle):
-            rightMotor.hold()
-        if abs(leftMotor.angle()) >= abs(leftAngle):
-            leftMotor.hold()
-    leftMotor.hold()
-    rightMotor.hold()
-
-
-def MoveStalled(leftDC, rightDC):
-    leftMotor.dc(leftDC)
-    rightMotor.dc(rightDC)
-
-    while True:
-        if leftMotor.control.stalled():
-            leftMotor.stop()
-            rightMotor.stop()
-            break
-        if rightMotor.control.stalled():
-            leftMotor.stop()
-            rightMotor.stop()
-            break
-
-
-def SinglePTrack(sensorPort, threshold, kp, speed):
-    if sensorPort == 3:
-        ref = leftSensor.reflection()
-        leftMotor.run(speed + ((ref - threshold) * kp))
-        rightMotor.run(speed - ((ref - threshold) * kp))
-    elif sensorPort == 2:
-        ref = middleSensor.reflection()
-        leftMotor.run(speed + ((ref - threshold) * kp))
-        rightMotor.run(speed - ((ref - threshold) * kp))
-    else:
-        ref = rightSensor.reflection()
-        leftMotor.run(speed + ((ref - threshold) * kp))
-        rightMotor.run(speed - ((ref - threshold) * kp))
-
-
-def SinglePTrackTillJunction(junctionPort, junctionThreshold, trackingPort, trackingThreshold, kp, speed):
+def MoveTillJunction(junctionPort, junctionThreshold, speed):
     if junctionPort == 3:
-        while leftSensor.reflection() > junctionThreshold:
-            SinglePTrack(trackingPort, trackingThreshold, kp, speed)
+        while leftSensor.reflected_light_intensity() > junctionThreshold:
+            leftMotor.on(speed)
+            rightMotor.on(speed)
     elif junctionPort == 2:
-        while middleSensor.reflection() > junctionThreshold:
-            SinglePTrack(trackingPort, trackingThreshold, kp, speed)
+        while middleSensor.reflected_light_intensity() > junctionThreshold:
+            leftMotor.on(speed)
+            rightMotor.on(speed)
     else:
-        while rightSensor.reflection() > junctionThreshold:
-            SinglePTrack(trackingPort, trackingThreshold, kp, speed)
+        while rightSensor.reflected_light_intensity() > junctionThreshold:
+            leftMotor.on(speed)
+            rightMotor.on(speed)
     leftMotor.stop()
     rightMotor.stop()
 
-
-def SinglePTrackTillDegrees(degrees, trackingPort, trackingThreshold, kp, speed):
-    leftMotor.reset_angle(0)
-    while abs(leftMotor.angle()) < abs(degrees):
-        SinglePTrack(trackingPort, trackingThreshold, kp, speed)
-    leftMotor.stop()
-    rightMotor.stop()
-
-
-def WaitUntillPressed(text: str):
-    while buttonSensor.pressed() == False:
-        pass
-    print(text)
-
-
-def ev3Print(text: str):
-    print(text)
-    ev3.screen.set_font(big_font)
-    ev3.screen.clear()
-    ev3.screen.print(text)
-
-
-def betterStalled(leftSpeed, rightSpeed):
-    leftMotor.run(leftSpeed)
-    rightMotor.run(rightSpeed)
-    wait(2000)
+def MoveTillStalled(leftSpeed, rightSpeed):
+    leftMotor.on(leftSpeed)
+    rightMotor.on(rightSpeed)
+    sleep(2000)
     while True:
         if (abs(leftMotor.speed()) < abs(leftSpeed * 0.1)) or (abs(rightMotor.speed()) < abs(rightSpeed * 0.1)):
             leftMotor.stop()
             rightMotor.stop()
             break
 
-
-def SinglePDTrack(sensorPort, threshold, kp, kd, speed):
-    ref = rightSensor.reflection()
-    global last_error  # im so smart
-    error = ref - threshold
-    p_gain = error * kp
-    derivative = error - last_error
-    d_gain = derivative * kd
-    leftMotor.run(speed-(p_gain+d_gain))
-    rightMotor.run(speed+(p_gain+d_gain))
-    last_error = error
-
-
-def SinglePDTrackDegrees(degrees, trackingPort, threshold, kp, kd, speed):
+def follow_lineForDegrees(degrees, trackingPort, left):
     leftMotor.reset_angle(0)
-    while abs(leftMotor.angle()) < abs(degrees):
-        SinglePDTrack(trackingPort, threshold, kp, kd, speed)
-    leftMotor.hold()
-    rightMotor.hold()
+    main_drive.cs = trackingPort
+    while abs(leftMotor.position()) < abs(degrees):
+        main_drive.follow_line(
+        kp, ki, kd, speed, follow_left_edge=left
+        )
+    leftMotor.stop()
+    rightMotor.stop()
 
-
-def SinglePDTrackTillJunction(junctionPort, junctionThreshold, trackingPort, trackingThreshold, kp, kd, speed):
+def follow_lineTillJunction(junctionPort, junctionThreshold, trackingPort, left):
+    main_drive.cs = trackingPort
     if junctionPort == 3:
-        while leftSensor.reflection() > junctionThreshold:
-            SinglePDTrack(trackingPort, trackingThreshold, kp, kd, speed)
+        while leftSensor.reflected_light_intensity() > junctionThreshold:
+            main_drive.follow_line(
+            kp, ki, kd, speed, follow_left_edge=left
+            )
     elif junctionPort == 2:
-        while middleSensor.reflection() > junctionThreshold:
-            SinglePDTrack(trackingPort, trackingThreshold, kp, kd, speed)
+        while middleSensor.reflected_light_intensity() > junctionThreshold:
+            main_drive.follow_line(
+            kp, ki, kd, speed, follow_left_edge=left
+            )
     else:
-        while rightSensor.reflection() > junctionThreshold:
-            SinglePDTrack(trackingPort, trackingThreshold, kp, kd, speed)
-    leftMotor.hold()
-    rightMotor.hold()
+        while rightSensor.reflected_light_intensity() > junctionThreshold:
+            main_drive.follow_line(
+            kp, ki, kd, speed, follow_left_edge=left
+            )
+    leftMotor.stop()
+    rightMotor.stop()
 
-def startRun():
-    leftMedMotor.stop()
-    rightMedMotor.stop()
-    WaitUntillPressed("1")
-    leftMedMotor.hold()
-    rightMedMotor.hold()
+def run1():
+    main_drive.on_for_rotation(speed, speed, 600)
+    main_drive.follow_lineTillJunction(
+        leftSensor, black, rightSensor, True
+    )
+    main_drive.on_for_rotation(speed, speed, 100)
+    main_drive.follow_lineTillJunction(
+        leftSensor, black, rightSensor, True
+    )
+    main_drive.on_for_rotation(speed, speed, 100)
+    main_drive.follow_lineTillJunction(
+        leftSensor, black, rightSensor, True
+    )
+    main_drive.on_for_rotation(speed, speed, 210)
+    rightMedMotor.on_for_degrees(speed, 500)
+
+
+# RUN STARTS HERE
+
+speed = SpeedPercent(50)
+kp = 1.2
+kd = 10
+ki = 0.5
+
+black = 9
+
+run1()
+
+leftMedMotor.stop()
+rightMedMotor.stop()
+leftMedMotor.stop()
+rightMedMotor.stop()
