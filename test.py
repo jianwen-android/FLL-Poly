@@ -1,4 +1,4 @@
-#!/usr/bin/env pybricks-micropython
+#!/usr/bin/env python3
 from time import sleep
 import asyncio
 
@@ -29,6 +29,6 @@ ki = 0.5
 while True:
     main_drive.cs = rightSensor
     main_drive.follow_line(
-    kp, ki, kd, SpeedPercent(50), follow_left_edge=False
+    kp, ki, kd, SpeedPercent(50)
     )
 

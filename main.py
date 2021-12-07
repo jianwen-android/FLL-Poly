@@ -1,4 +1,5 @@
-#!/usr/bin/env pybricks-micropython
+#!/usr/bin/env python3
+
 from time import sleep
 import asyncio
 
@@ -49,7 +50,7 @@ def MoveTillStalled(leftSpeed, rightSpeed):
             rightMotor.stop()
             break
 
-def follow_lineForDegrees(degrees, trackingPort, left):
+def follow_lineForDegrees(degrees, trackingPort, speed, left):
     leftMotor.reset_angle(0)
     main_drive.cs = trackingPort
     while abs(leftMotor.position()) < abs(degrees):
@@ -59,7 +60,7 @@ def follow_lineForDegrees(degrees, trackingPort, left):
     leftMotor.stop()
     rightMotor.stop()
 
-def follow_lineTillJunction(junctionPort, junctionThreshold, trackingPort, left):
+def follow_lineTillJunction(junctionPort, junctionThreshold, trackingPort, speed, left):
     main_drive.cs = trackingPort
     if junctionPort == 3:
         while leftSensor.reflected_light_intensity() > junctionThreshold:
@@ -80,25 +81,25 @@ def follow_lineTillJunction(junctionPort, junctionThreshold, trackingPort, left)
     rightMotor.stop()
 
 def run1():
-    main_drive.on_for_rotation(speed, speed, 600)
+    main_drive.on_for_rotation(globalSpeed, globalSpeed, 600)
     main_drive.follow_lineTillJunction(
-        leftSensor, black, rightSensor, True
+        leftSensor, black, rightSensor, globalSpeed, True
     )
-    main_drive.on_for_rotation(speed, speed, 100)
+    main_drive.on_for_rotation(globalSpeed, globalSpeed, 100)
     main_drive.follow_lineTillJunction(
-        leftSensor, black, rightSensor, True
+        leftSensor, black, rightSensor, globalSpeed, True
     )
-    main_drive.on_for_rotation(speed, speed, 100)
+    main_drive.on_for_rotation(globalSpeed, globalSpeed, 100)
     main_drive.follow_lineTillJunction(
-        leftSensor, black, rightSensor, True
+        leftSensor, black, rightSensor, globalSpeed, True
     )
-    main_drive.on_for_rotation(speed, speed, 210)
-    rightMedMotor.on_for_degrees(speed, 500)
+    main_drive.on_for_rotation(globalSpeed, globalSpeed, 210)
+    rightMedMotor.on_for_degrees(globalSpeed, 500)
 
 
 # RUN STARTS HERE
 
-speed = SpeedPercent(50)
+globalSpeed = SpeedPercent(50)
 kp = 1.2
 kd = 10
 ki = 0.5
