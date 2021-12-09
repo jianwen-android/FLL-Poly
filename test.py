@@ -12,13 +12,12 @@ from ev3dev2.sensor.lego import ColorSensor
 leftMotor = LargeMotor(OUTPUT_B)
 rightMotor = LargeMotor(OUTPUT_C)
 
-'''
-leftMedMotor = MediumMotor(OUTPUT_D)
-rightMedMotor = MediumMotor(OUTPUT_A)
-'''
+# leftMedMotor = MediumMotor(OUTPUT_D)
+# rightMedMotor = MediumMotor(OUTPUT_A)
+
 # Tank drives
 main_drive = MoveTank(OUTPUT_B, OUTPUT_C)
-secondary_drive = MoveTank(OUTPUT_D, OUTPUT_A)
+# secondary_drive = MoveTank(OUTPUT_D, OUTPUT_A)
 
 # Sensors
 leftSensor = ColorSensor(INPUT_1)
@@ -56,6 +55,7 @@ def MoveTillStalled(leftSpeed, rightSpeed):
 
 def follow_lineForDegrees(degrees, trackingPort, trackingThreshold, speed, left):
     leftMotor.reset_angle(0)
+    left = not left
     main_drive.cs = trackingPort
     while abs(leftMotor.position()) < abs(degrees):
         main_drive.follow_line(
@@ -66,6 +66,7 @@ def follow_lineForDegrees(degrees, trackingPort, trackingThreshold, speed, left)
 
 def follow_lineTillJunction(junctionPort, junctionThreshold, trackingPort, trackingThreshold, speed, left):
     main_drive.cs = trackingPort
+    left = not left
     if junctionPort == 3:
         while leftSensor.reflected_light_intensity() > junctionThreshold:
             main_drive.follow_line(
@@ -84,13 +85,23 @@ def follow_lineTillJunction(junctionPort, junctionThreshold, trackingPort, track
     leftMotor.stop()
     rightMotor.stop()
 
-kp = 5
-kd = 1
-ki = 1
+def SinglePDTrack(sensorPort, threshold, kp, kd, speed):
+    ref = rightSensor.reflected_light_intensity
+    global last_error
+    error = ref - threshold
+    p_gain = error * kp
+    derivative = error - last_error
+    d_gain = derivative * kd
+    leftMotor.on(speed-(p_gain+d_gain))
+    rightMotor.on(speed+(p_gain+d_gain))
+    last_error = error
 
+kp = 3
+kd = 0
+ki = 0
 
 main_drive.cs = ColorSensor(INPUT_3)
 main_drive.follow_line(
-kp, ki, kd, SpeedPercent(-30), target_light_intensity = 45, white = 90
+kp, ki, kd, SpeedPercent(-30), target_light_intensity=45, follow_left_edge=True, white=90
 )
 
