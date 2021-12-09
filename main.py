@@ -100,11 +100,13 @@ def run1():
     rightMedMotor.on_for_degrees(globalSpeed, 500)
     main_drive.on_for_rotation(-globalSpeed, -globalSpeed, 1400)
 
+def run2():
+
 
 # RUN STARTS HERE
 
-globalSpeed = SpeedPercent(50)
-kp = 1.2
+globalSpeed = -SpeedPercent(50)
+kp = 5
 kd = 10
 ki = 0.5
 blackWhite = 48
