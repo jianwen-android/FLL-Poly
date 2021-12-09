@@ -84,7 +84,7 @@ def follow_lineTillJunction(junctionPort, junctionThreshold, trackingPort, track
     leftMotor.stop()
     rightMotor.stop()
 
-kp = 1
+kp = 5
 kd = 1
 ki = 1
 
