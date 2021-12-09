@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
+
 from time import sleep
-import asyncio
 
 from ev3dev2.display import Display
 from ev3dev2.motor import LargeMotor, MediumMotor,OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, MoveTank, SpeedPercent
@@ -11,17 +11,78 @@ from ev3dev2.sensor.lego import ColorSensor
 # Motors
 leftMotor = LargeMotor(OUTPUT_B)
 rightMotor = LargeMotor(OUTPUT_C)
-# rightMedMotor = MediumMotor(OUTPUT_A)
-# leftMedMotor = MediumMotor(OUTPUT_D)
 
+'''
+leftMedMotor = MediumMotor(OUTPUT_D)
+rightMedMotor = MediumMotor(OUTPUT_A)
+'''
 # Tank drives
-main_drive = MoveTank(OUTPUT_B,OUTPUT_C)
-# secondary_drive = MoveTank(leftMedMotor, rightMedMotor)
+main_drive = MoveTank(OUTPUT_B, OUTPUT_C)
+secondary_drive = MoveTank(OUTPUT_D, OUTPUT_A)
 
 # Sensors
-# leftSensor = ColorSensor(INPUT_1)
-# middleSensor = ColorSensor(INPUT_2)
-# rightSensor = ColorSensor(INPUT_3)
+leftSensor = ColorSensor(INPUT_1)
+middleSensor = ColorSensor(INPUT_2)
+rightSensor = ColorSensor(INPUT_3)
+
+print("Done importing")
+
+# Functions
+def MoveTillJunction(junctionPort, junctionThreshold, speed):
+    if junctionPort == 3:
+        while leftSensor.reflected_light_intensity() > junctionThreshold:
+            leftMotor.on(speed)
+            rightMotor.on(speed)
+    elif junctionPort == 2:
+        while middleSensor.reflected_light_intensity() > junctionThreshold:
+            leftMotor.on(speed)
+            rightMotor.on(speed)
+    else:
+        while rightSensor.reflected_light_intensity() > junctionThreshold:
+            leftMotor.on(speed)
+            rightMotor.on(speed)
+    leftMotor.stop()
+    rightMotor.stop()
+
+def MoveTillStalled(leftSpeed, rightSpeed):
+    leftMotor.on(leftSpeed)
+    rightMotor.on(rightSpeed)
+    sleep(2000)
+    while True:
+        if (abs(leftMotor.speed()) < abs(leftSpeed * 0.1)) or (abs(rightMotor.speed()) < abs(rightSpeed * 0.1)):
+            leftMotor.stop()
+            rightMotor.stop()
+            break
+
+def follow_lineForDegrees(degrees, trackingPort, trackingThreshold, speed, left):
+    leftMotor.reset_angle(0)
+    main_drive.cs = trackingPort
+    while abs(leftMotor.position()) < abs(degrees):
+        main_drive.follow_line(
+        kp, ki, kd, speed, target_light_intensity=trackingThreshold, follow_left_edge=left, white=90
+        )
+    leftMotor.stop()
+    rightMotor.stop()
+
+def follow_lineTillJunction(junctionPort, junctionThreshold, trackingPort, trackingThreshold, speed, left):
+    main_drive.cs = trackingPort
+    if junctionPort == 3:
+        while leftSensor.reflected_light_intensity() > junctionThreshold:
+            main_drive.follow_line(
+            kp, ki, kd, speed, target_light_intensity=trackingThreshold, follow_left_edge=left, white=90
+            )
+    elif junctionPort == 2:
+        while middleSensor.reflected_light_intensity() > junctionThreshold:
+            main_drive.follow_line(
+            kp, ki, kd, speed, target_light_intensity=trackingThreshold, follow_left_edge=left, white=90
+            )
+    else:
+        while rightSensor.reflected_light_intensity() > junctionThreshold:
+            main_drive.follow_line(
+            kp, ki, kd, speed, target_light_intensity=trackingThreshold, follow_left_edge=left, white=90
+            )
+    leftMotor.stop()
+    rightMotor.stop()
 
 kp = 1
 kd = 1
