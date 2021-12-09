@@ -23,13 +23,13 @@ main_drive = MoveTank(OUTPUT_B,OUTPUT_C)
 # middleSensor = ColorSensor(INPUT_2)
 # rightSensor = ColorSensor(INPUT_3)
 
-kp = 1
+kp = 5
 kd = 0
 ki = 0
 
 
 main_drive.cs = ColorSensor(INPUT_3)
 main_drive.follow_line(
-kp, ki, kd, SpeedPercent(-30) #, target_light_intensity = 40, white = 100
+kp, ki, kd, SpeedPercent(-30), target_light_intensity = 45, white = 90
 )
 
