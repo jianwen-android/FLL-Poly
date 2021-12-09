@@ -23,9 +23,9 @@ main_drive = MoveTank(OUTPUT_B,OUTPUT_C)
 # middleSensor = ColorSensor(INPUT_2)
 # rightSensor = ColorSensor(INPUT_3)
 
-kp = 5
-kd = 0
-ki = 0
+kp = 1
+kd = 1
+ki = 1
 
 
 main_drive.cs = ColorSensor(INPUT_3)
