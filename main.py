@@ -7,7 +7,7 @@ from ev3dev2.motor import LargeMotor, MediumMotor,OUTPUT_A, OUTPUT_B, OUTPUT_C, 
 from ev3dev2.port import LegoPort
 from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4
 from ev3dev2.sensor.lego import ColorSensor, TouchSensor
-
+from functions import *
 # Motors
 leftMotor = LargeMotor(OUTPUT_B)
 rightMotor = LargeMotor(OUTPUT_C)
