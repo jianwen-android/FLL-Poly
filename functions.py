@@ -29,12 +29,17 @@ button = TouchSensor(INPUT_4)
 
 print('Initalization Done')
 
-def LineTrace(Target, Kp, Kd, Speed):
+def LineTrace(TraceSensor, Target, Kp, Kd, Speed):
+    if TraceSensor == 1:
+        ref = leftSensor.reflected_light_intensity
+    elif TraceSensor == 2:
+        ref = middleSensor.reflected_light_intensity
+    elif TraceSensor == 3:
+        ref = rightSensor.reflected_light_intensity
     temp = 0
-    ref = rightSensor.reflected_light_intensity
     error = ref - Target
     p_gain = error * Kp
-    while temp == 0:
+    if temp == 0:
         last_error = 0
         derivative = error
         temp += 1
@@ -43,13 +48,31 @@ def LineTrace(Target, Kp, Kd, Speed):
     d_gain = derivative * Kd
     change = (p_gain+d_gain)/10
     #print(change)
-    leftMotor.on(SpeedPercent(Speed-(change)), brake=False)
-    rightMotor.on(SpeedPercent(Speed+(change)),brake=False)
+    leftMotor.on(SpeedPercent(Speed+(change)), brake=False)
+    rightMotor.on(SpeedPercent(Speed-(change)),brake=False)
     last_error = error
 
-def LineTraceTillJunc(Target, Kp, Kd, Black, Speed):
-    while middleSensor.reflected_light_intensity > Black:
-        LineTrace(Target, Kp, Kd, Speed)
+def LineTraceTillJunc(TraceSensor, JuncSensor, Target, Kp, Kd, Black, Speed):
+    while True:
+        if JuncSensor == 1:
+            ref = leftSensor.reflected_light_intensity
+        elif JuncSensor == 2:
+            ref = middleSensor.reflected_light_intensity
+        elif JuncSensor == 3:
+            ref = rightSensor.reflected_light_intensity
+        print('test')
+        if ref < Black:
+            break
+        else:
+            LineTrace(TraceSensor, Target, Kp, Kd, Speed)
+    leftMotor.on(0)
+    rightMotor.on(0)
+
+def LineTraceTillDegress(Degrees, TraceSensor, Target, Kp, Kd, Speed):
+    leftMotor.position = 0
+    rightMotor.position = 0
+    while abs(leftMotor.position) < abs(Degrees) and abs(rightMotor.position) < abs(Degrees):
+        LineTrace(TraceSensor, Target, Kp, Kd, Speed)
     leftMotor.on(0)
     rightMotor.on(0)
 
@@ -81,10 +104,14 @@ def LineSquaring(Seconds, Target, Black, White, Approach, Forward, Backward):
             break
     print("Done Rough Approach")
     print('Fine Adjustments')
-    
+    print("Doing Left Motor First")
+    if leftMotor.reflected_light_intensity < Target:
+        pass
+
 print('waiting for command')
 button.wait_for_bump()
 print('launching')
-#LineTraceTillJunc(55, 2, 0.05, 12, -30)
-LineSquaring(5, 55, 20, 90, -20, -10, 10)
+# LineTraceTillJunc(2, 1, 55, 2, 0.05, 15, -30)
+# #LineSquaring(5, 55, 20, 90, -20, -10, 10)
+LineTraceTillDegress(500, 3, 55 , 2, 0.05, -30)
 
