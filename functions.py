@@ -86,10 +86,17 @@ def LineSquaring(Seconds, Target, Black, White, Approach, Forward, Backward):
     Backward = SpeedPercent(Backward)
     print('Rough Approach')
     while True:
+        while leftSensor.reflected_light_intensity < White and rightSensor.reflected_light_intensity < White:
+            temp = 0
+            while temp == 0:
+                print('approaching while line')
+                temp += 1
+            leftMotor.on(Approach)
+            rightMotor.on(Approach)
         while leftSensor.reflected_light_intensity > Black and rightSensor.reflected_light_intensity > Black:
             temp = 0
             while temp == 0:
-                print('approaching line')
+                print('approaching black line')
                 temp += 1
             leftMotor.on(Approach)
             rightMotor.on(Approach)
@@ -108,9 +115,33 @@ def LineSquaring(Seconds, Target, Black, White, Approach, Forward, Backward):
             break
     print("Done Rough Approach")
     print('Fine Adjustments')
-    print("Doing Left Motor First")
-    if leftMotor.reflected_light_intensity < Target:
-        pass
+    timeout = time.time() + Seconds
+    while True:
+        print("Doing Left Motor First")
+        Text(str(leftSensor.reflected_light_intensity))
+        if leftSensor.reflected_light_intensity < Target:
+            while leftSensor.reflected_light_intensity < Target:
+                leftMotor.on(Backward)
+            leftMotor.on(0)
+        elif leftSensor.reflected_light_intensity > Target:
+            while leftSensor.reflected_light_intensity < Target:
+                leftMotor.on(Forward)
+            leftMotor.on(0)
+        print("Done with left motor")
+        Text(str(leftSensor.reflected_light_intensity))
+        print("Doing Right Motor Now")
+        if rightSensor.reflected_light_intensity < Target:
+            while rightSensor.reflected_light_intensity < Target:
+                rightMotor.on(Backward)
+            rightMotor.on(0)
+        elif rightSensor.reflected_light_intensity > Target:
+            while rightSensor.reflected_light_intensity < Target:
+                rightMotor.on(Forward)
+            rightMotor.on(0)
+        print("Done with right motor")
+        if time.time() > timeout:
+            break
+    print('done squaring')
 
 def Text(text):
     screen.text_pixels(text,font=fonts.load('luBS24'))
@@ -119,11 +150,12 @@ def Text(text):
 
 
 
-# print('waiting for command')
-# button.wait_for_bump()
-# print('launching')
+print('waiting for command')
+button.wait_for_bump()
+print('launching')
+LineSquaring(5, 55, 15, 90, -20, -10, 10)
 # LineTraceTillJunc(3, 2, 55, 2, 0.025, 20, -30)
 # # LineTraceTillJunc(2, 1, 55, 2, 0.05, 15, -30)
-# # #LineSquaring(5, 55, 20, 90, -20, -10, 10)
+
 # LineTraceTillDegress(5000, 3, 55 , 2, 0.025, -30)
 
