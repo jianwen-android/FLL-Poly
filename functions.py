@@ -108,10 +108,12 @@ def LineSquaring(Seconds, Target, Black, White, Approach, Forward, Backward):
     if leftMotor.reflected_light_intensity < Target:
         pass
 
-print('waiting for command')
-button.wait_for_bump()
-print('launching')
-# LineTraceTillJunc(2, 1, 55, 2, 0.05, 15, -30)
-# #LineSquaring(5, 55, 20, 90, -20, -10, 10)
-LineTraceTillDegress(500, 3, 55 , 2, 0.05, -30)
+
+
+# print('waiting for command')
+# button.wait_for_bump()
+# print('launching')
+# # LineTraceTillJunc(2, 1, 55, 2, 0.05, 15, -30)
+# # #LineSquaring(5, 55, 20, 90, -20, -10, 10)
+# LineTraceTillDegress(5000, 3, 55 , 2, 0.025, -30)
 
