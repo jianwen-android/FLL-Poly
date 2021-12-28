@@ -5,6 +5,7 @@
 from time import sleep, time
 
 from ev3dev2.display import Display
+import ev3dev2.fonts as fonts
 from ev3dev2.motor import LargeMotor, MediumMotor,OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, MoveTank, SpeedPercent
 from ev3dev2.port import LegoPort
 from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4
@@ -26,6 +27,8 @@ leftSensor = ColorSensor(INPUT_1)
 middleSensor = ColorSensor(INPUT_2)
 rightSensor = ColorSensor(INPUT_3)
 button = TouchSensor(INPUT_4)
+
+screen = Display()
 
 print('Initalization Done')
 
@@ -53,6 +56,7 @@ def LineTrace(TraceSensor, Target, Kp, Kd, Speed):
     last_error = error
 
 def LineTraceTillJunc(TraceSensor, JuncSensor, Target, Kp, Kd, Black, Speed):
+    print("LineTraceTillJunc|TS:{}|JS:{}|Tar:{}|Kp:{}|Kd:{}|BLK:{}|SPD:{}".format(TraceSensor,JuncSensor,Target,Kp,Kd,Black,Speed))
     while True:
         if JuncSensor == 1:
             ref = leftSensor.reflected_light_intensity
@@ -60,7 +64,6 @@ def LineTraceTillJunc(TraceSensor, JuncSensor, Target, Kp, Kd, Black, Speed):
             ref = middleSensor.reflected_light_intensity
         elif JuncSensor == 3:
             ref = rightSensor.reflected_light_intensity
-        print('test')
         if ref < Black:
             break
         else:
@@ -69,6 +72,7 @@ def LineTraceTillJunc(TraceSensor, JuncSensor, Target, Kp, Kd, Black, Speed):
     rightMotor.on(0)
 
 def LineTraceTillDegress(Degrees, TraceSensor, Target, Kp, Kd, Speed):
+    print("LineTraceTillDeg|Deg:{}|TS:{}|Tar:{}|Kp:{}|Kd:{}|SPD:{}".format(Degrees,TraceSensor,Target,Kp,Kd,Speed))
     leftMotor.position = 0
     rightMotor.position = 0
     while abs(leftMotor.position) < abs(Degrees) and abs(rightMotor.position) < abs(Degrees):
@@ -108,11 +112,17 @@ def LineSquaring(Seconds, Target, Black, White, Approach, Forward, Backward):
     if leftMotor.reflected_light_intensity < Target:
         pass
 
+def Text(text):
+    screen.text_pixels(text,font=fonts.load('luBS24'))
+    screen.update()
+    print(text)
+
 
 
 # print('waiting for command')
 # button.wait_for_bump()
 # print('launching')
+# LineTraceTillJunc(3, 2, 55, 2, 0.025, 20, -30)
 # # LineTraceTillJunc(2, 1, 55, 2, 0.05, 15, -30)
 # # #LineSquaring(5, 55, 20, 90, -20, -10, 10)
 # LineTraceTillDegress(5000, 3, 55 , 2, 0.025, -30)

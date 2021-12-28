@@ -1,14 +1,5 @@
 #!/usr/bin/env python3
 
-from time import sleep
-from typing import Text
-
-from ev3dev2.display import Display 
-
-from ev3dev2.motor import LargeMotor, MediumMotor,OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, MoveTank, SpeedPercent
-from ev3dev2.port import LegoPort
-from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4
-from ev3dev2.sensor.lego import ColorSensor, TouchSensor
 from functions import *
 
 # # Motors
@@ -147,24 +138,66 @@ from functions import *
 # rightMotor.stop()
 
 def RUN_1():
+    screen.text_pixels('RUN_1',font=fonts.load('luBS24'))
+    screen.update()
+    button.wait_for_bump()
     print('Change of Attachment & Waiting For Launch')
     secondary_drive.on(0,SpeedPercent(-30))
     leftMedMotor.stop()
     button.wait_for_bump()
     print('Starting')
     secondary_drive.on(SpeedPercent(100),0)
-    sleep(1.5)
+    sleep(1.35)
     rightMedMotor.stop()
     leftMedMotor.stop()
+    # Move to Black Line
     main_drive.on_for_degrees(50,50, -540)
+    # Line Trace till collect chicken
     LineTraceTillJunc(3, 2, 55, 2, 0.025, 15, -30)
     main_drive.on_for_degrees(50,50, -570)
+    # Line Trace to Deposit Wing
     LineTraceTillJunc(3, 2, 55, 2, 0.025, 15, -30)
-    main_drive.on_for_degrees(50,60, -30)
+    main_drive.on_for_degrees(50,63, -30)
     LineTraceTillDegress(180, 3, 55 , 2, 0.025, -30)
-    secondary_drive.on(0,SpeedPercent(20))
+    # Close Cage & Drop 
+    secondary_drive.on(0,SpeedPercent(10))
     sleep(1)
     rightMedMotor.stop()
     leftMedMotor.stop()
+    # Line Trace till deposite Cargo and Pick Up
+    LineTraceTillJunc(3, 2, 55, 2, 0.025, 15, -30)
+    main_drive.on_for_degrees(50,50, -100)
 
-RUN_1()
+
+
+def Final_RUN():
+    screen.text_pixels('FINAL_RUN',font=fonts.load('luBS24'))
+    screen.update()
+    print('Change of Attachment & Waiting For Launch')
+    secondary_drive.on(0,SpeedPercent(-30))
+    button.wait_for_bump()
+    rightMedMotor.stop()
+    print('Starting')
+     # Move to Black Line
+    main_drive.on_for_degrees(50,50, -540)
+    LineTraceTillJunc(3, 1, 55, 2, 0.025, 20, -30)
+    print('passing')
+    main_drive.on_for_degrees(50,50, -100)
+    main_drive.on_for_degrees(72,30, -230)
+    print('dont pass')
+    # Line Trace to Ship Junction
+    LineTraceTillJunc(3, 2, 55, 2, 0.025, 15, -30)
+    # Turn to face ship
+    main_drive.on_for_degrees(50,50, -250)
+    LineTraceTillJunc(3, 2, 55, 2, 0.025, 15, -30)
+    sleep(2)
+    main_drive.on_for_degrees(0,50, -38
+    0)
+    sleep(2)
+    main_drive.on_for_degrees(50,50,-200)
+    LineTraceTillDegress(150,3,55,2,0.025,-15)
+    
+
+
+# RUN_1()
+Final_RUN()
