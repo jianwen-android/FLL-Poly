@@ -6,7 +6,7 @@ from time import sleep, time
 
 from ev3dev2.display import Display
 import ev3dev2.fonts as fonts
-from ev3dev2.motor import LargeMotor, MediumMotor,OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, MoveTank, SpeedPercent, DcMotor
+from ev3dev2.motor import LargeMotor, MediumMotor,OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, MoveTank, SpeedPercent, Motor
 from ev3dev2.port import LegoPort
 from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4
 from ev3dev2.sensor.lego import ColorSensor, TouchSensor
@@ -57,8 +57,8 @@ def LineTrace(TraceSensor, Target, Kp, Kd, Speed):
     # else:
     #     rightSpeed = min(100,Speed-change)
     #print(change)
-    leftMotor.on((Speed-change), brake=False)
-    rightMotor.on((Speed+change),brake=False)
+    leftMotor.duty_cycle_sp = (Speed-change)
+    rightMotor.duty_cycle_sp = (Speed+change)
     last_error = error
 
 def LineTraceTillJunc(TraceSensor, JuncSensor, Target, Kp, Kd, Black, Speed):
