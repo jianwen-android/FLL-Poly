@@ -6,7 +6,7 @@ from time import sleep, time
 
 from ev3dev2.display import Display
 import ev3dev2.fonts as fonts
-from ev3dev2.motor import LargeMotor, MediumMotor,OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, MoveTank, SpeedPercent
+from ev3dev2.motor import LargeMotor, MediumMotor,OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, MoveTank, SpeedPercent, DcMotor
 from ev3dev2.port import LegoPort
 from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4
 from ev3dev2.sensor.lego import ColorSensor, TouchSensor
@@ -28,31 +28,37 @@ middleSensor = ColorSensor(INPUT_2)
 rightSensor = ColorSensor(INPUT_3)
 button = TouchSensor(INPUT_4)
 
+last_error = 0
+
 screen = Display()
 
 print('Initalization Done')
 
 def LineTrace(TraceSensor, Target, Kp, Kd, Speed):
+    global last_error
     if TraceSensor == 1:
         ref = leftSensor.reflected_light_intensity
     elif TraceSensor == 2:
         ref = middleSensor.reflected_light_intensity
     elif TraceSensor == 3:
         ref = rightSensor.reflected_light_intensity
-    temp = 0
     error = ref - Target
     p_gain = error * Kp
-    if temp == 0:
-        last_error = 0
-        derivative = error
-        temp += 1
-    else:
-        derivative = error - last_error
+    derivative = error - last_error
     d_gain = derivative * Kd
-    change = (p_gain+d_gain)/10
+    change = (p_gain+d_gain) / 2
+    print(last_error, error, p_gain, derivative, d_gain, change)
+    # if (Speed+change) < 0:
+    #     leftSpeed = max(-100,Speed+change)
+    # else:
+    #     leftSpeed = min(100,Speed+change)
+    # if (Speed-change) < 0:
+    #     rightSpeed = max(-100,Speed-change)
+    # else:
+    #     rightSpeed = min(100,Speed-change)
     #print(change)
-    leftMotor.on(SpeedPercent(Speed+(change)), brake=False)
-    rightMotor.on(SpeedPercent(Speed-(change)),brake=False)
+    leftMotor.on((Speed-change), brake=False)
+    rightMotor.on((Speed+change),brake=False)
     last_error = error
 
 def LineTraceTillJunc(TraceSensor, JuncSensor, Target, Kp, Kd, Black, Speed):
@@ -141,3 +147,8 @@ def Text(text):
 
 # LineTraceTillDegress(5000, 3, 55 , 2, 0.025, -30)
 
+Text("Testing Line Tracing")
+button.wait_for_bump()
+Text("Running Line Tracing")
+while True:
+    LineTrace(1, 48, 0.3, 1, -30)
