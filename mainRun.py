@@ -2,6 +2,7 @@
 
 from func import *
 
+
 def Run1():
     WriteOnScreen("Run 1")
     WaitForPress()
@@ -14,7 +15,7 @@ def Run1():
     time.sleep(1)
     leftMedMotor.hold()
     rightMedMotor.hold()
-    
+
     MoveToAngle(600, 612, -500, -510)
     while leftSensor.reflection() > 15:
         rightMotor.run(-300)
@@ -42,8 +43,7 @@ def Run1():
     rightMedMotor.hold()
     MoveToAngle(1800, 1800, 500, 500)
 
-    
-    '''
+    """
     SinglePDTrackTillJunction(2, 15, 3, 55, 2.7, 2.7, -370)
     MoveToAngle(570, 570, -500, -500)
     SinglePDTrackTillJunction(2, 15, 3, 55, 2.7, 2.7, -370)
@@ -55,6 +55,16 @@ def Run1():
     leftMedMotor.hold()
     SinglePDTrackTillJunction(2, 15, 3, 55, 2.7, 2.7, -370)
     MoveToAngle(100, 100, -500, -500)
-    '''
+    """
+
+
+def Run3():  # single onion flat up
+    MoveToAngle(650, 650, -500, -500)
+    SinglePDTrackTillJunction(2, 15, 3, 55, 2.7, 2.7, -370)
+    MoveToAngle(150, 150, -500, -500)
+    SinglePDTrackTillJunction(2, 15, 3, 55, 2.7, 2.7, 370)
+    MoveToAngle(150, 150, 500, 500)
+    MoveToAngle(1800, 1800, 500, 500)
+
 
 Run1()
