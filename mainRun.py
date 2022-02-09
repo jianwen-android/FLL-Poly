@@ -6,6 +6,7 @@ def Run1():
     WriteOnScreen("Run 1")
     WaitForPress()
     WriteOnScreen("Change Attachment")
+    rightMedMotor.run(100)
     rightMedMotor.hold()
     leftMedMotor.hold()
     WaitForPress()
