@@ -79,10 +79,32 @@ def SinglePDTrack(sensorPort, threshold, kp, kd, speed):
     p_gain = error * kp
     derivative = error - last_error
     d_gain = derivative * kd
+    leftMotor.dc(min(100, speed-(p_gain+d_gain))) #im a genius
+    rightMotor.dc(max(-100, speed+(p_gain+d_gain)))
+    last_error = error
+
+## Line Tracking
+def SinglePDTrackRight(sensorPort, threshold, kp, kd, speed):
+    if sensorPort == 1:
+        ref = leftSensor.reflection()
+        
+    elif sensorPort == 2:
+        ref = middleSensor.reflection()
+
+    else:
+        ref = rightSensor.reflection()
+
+    #print(ref)
+    global last_error  # im so smart
+    error = ref - threshold
+    p_gain = error * kp
+    derivative = error - last_error
+    d_gain = derivative * kd
     #print(d_gain)
     leftMotor.run(speed-(p_gain+d_gain))
     rightMotor.run(speed+(p_gain+d_gain))
     last_error = error
+
 
 ## Line Tracking Till Junction
 def SinglePDTrackTillJunction(junctionPort, junctionThreshold, trackingPort, trackingThreshold, kp, kd, speed):

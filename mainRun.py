@@ -60,12 +60,20 @@ def Run1():
 
 
 def Run3():  # single onion flat up
+    WriteOnScreen("Run 3 Ready")
+    WaitForPress()
+    WriteOnScreen("Launching")
     MoveToAngle(650, 650, -500, -500)
-    SinglePDTrackTillJunction(2, 15, 3, 55, 2.7, 2.7, -370)
-    MoveToAngle(150, 150, -500, -500)
-    SinglePDTrackTillJunction(2, 15, 3, 55, 2.7, 2.7, 370)
-    MoveToAngle(150, 150, 500, 500)
+    SinglePDTrackTillJunction(2, 12, 3, 50, -0.7, -10, -75)
+    MoveToAngle(170, 170, -500, -500)
+    while leftSensor.reflection() != 11:
+        leftMotor.dc(50)
+        rightMotor.dc(50)
+    MoveToAngle(280, 280, 500, 500)
+    leftMedMotor.run(200)
+    time.sleep(5)
+    leftMedMotor.hold()
     MoveToAngle(1800, 1800, 500, 500)
 
 
-Run1()
+Run3()
