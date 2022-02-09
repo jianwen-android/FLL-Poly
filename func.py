@@ -63,7 +63,7 @@ def MoveToAngle(leftAngle, rightAngle, leftSpeed, rightSpeed):
 
 
 ## Line Tracking
-def SinglePDTrack(sensorPort, threshold, kp, kd, speed):
+def SinglePDTrack(sensorPort, threshold, kp, kd, speed): #test kp then kd, -(kp, kd) for right side line tracing
     if sensorPort == 1:
         ref = leftSensor.reflection()
         
@@ -81,28 +81,6 @@ def SinglePDTrack(sensorPort, threshold, kp, kd, speed):
     d_gain = derivative * kd
     leftMotor.dc(min(100, speed-(p_gain+d_gain))) #im a genius
     rightMotor.dc(max(-100, speed+(p_gain+d_gain)))
-    last_error = error
-
-## Line Tracking
-def SinglePDTrackRight(sensorPort, threshold, kp, kd, speed):
-    if sensorPort == 1:
-        ref = leftSensor.reflection()
-        
-    elif sensorPort == 2:
-        ref = middleSensor.reflection()
-
-    else:
-        ref = rightSensor.reflection()
-
-    #print(ref)
-    global last_error  # im so smart
-    error = ref - threshold
-    p_gain = error * kp
-    derivative = error - last_error
-    d_gain = derivative * kd
-    #print(d_gain)
-    leftMotor.run(speed-(p_gain+d_gain))
-    rightMotor.run(speed+(p_gain+d_gain))
     last_error = error
 
 
