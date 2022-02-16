@@ -77,35 +77,43 @@ def Run2():
     WriteOnScreen("Run 2 Ready")
     WaitForPress()
     WriteOnScreen("Launching")
+    # leave quarter circle starting zone
     MoveToAngle(100, 100, -600, -600)
     MoveToAngle(155, 0, -600, 0)
     MoveToAngle(300, 300, -600, -600)
+    #linetrace to objective
     SinglePDTrackTillDegrees(1000, 3, 50, 0.65, 10, -75)
-    SinglePDTrackTillJunction(2, 12, 3, 50, 0.65, 10, -75)
-    MoveToAngle(50, 50, -600, -600)
+    SinglePDTrackTillJunction(2, 12, 3, 50, 0.45, 10, -75) # third junction on the left
+    MoveToAngle(50, 50, -600, -600) #move a little more to adjust
     SinglePDTrackTillJunction(2, 12, 3, 50, 0.65, 10, -75)
     MoveToAngle(50, 50, -600, -600)
     SinglePDTrackTillDegrees(50, 3, 50, 0.65, 10, -75)
-    MoveToAngle(300,300,-600,-600)
-    MoveToAngle(0,140,0,-200)
-    SinglePDTrackTillDegrees(400, 2, 50, 0.65, 10, -75)
-    SinglePDTrackTillJunction(1, 12, 2, 50, 0.65, 10, -75)
-    MoveToAngle(60,60,-600,-600)
-    MoveToAngle(100,100,200,200)
-    MoveToAngle(0,500,0,600)
-    MoveToAngle(400,400,1000,1000)
-    MoveToAngle(0,100,0,-500)
-    SinglePDTrackTillJunction(2, 12, 1, 50, 0.65, 10, -75)
-    MoveToAngle(30,30,-600,-600)
-    rightMedMotor.run(1000)
-    time.sleep(0.6)
+    MoveToAngle(280,280,-600,-600)
+    MoveToAngle(0,75,0,-200)
+    SinglePDTrackTillDegrees(400, 2, 50, -0.45, -8, -75) #trace with middle sensor 
+    SinglePDTrackTillJunction(1, 12, 2, 50, -0.65, -10, -75)
+    # parcel drop
+    MoveToAngle(100,100,-500,-600)
+    MoveToAngle(60, 60, 200,200)# reverse from parcel
+    MoveToAngle(0,470,0,600) #turn back
+    MoveToAngle(445,445,800,1000) #wall align
+    MoveToAngle(0,140,0,-500) #turn towards line
+    MoveToAngle(250,250,-500,-500)
+    MoveToAngle(70,0,-500,0)
+    SinglePDTrackTillDegrees(200, 2, 50, 0.5, 10, -75) #trace to middle of the path
+    rightMedMotor.run(1000) #turn down the attachment
+    time.sleep(0.8)
     rightMedMotor.hold()
-    SinglePDTrackTillJunction(2, 12, 1, 50, 0.65, 10, -75)
-    rightMedMotor.run(-1000)
+    SinglePDTrackTillJunction(2, 12, 1, 50, 0.2, 4, -50) #linetrace to cargo sorter
+    MoveToAngle(50,50,600,600) # go back to go home
+    rightMedMotor.run(-500)
     time.sleep(2)
     rightMedMotor.hold()
-    MoveToAngle(40,40,600,600)
-    MoveToAngle(100,0,-600,0)
+    MoveToAngle(500,500,750,600) # go back to go home
+    MoveToAngle(300,0,-750,0) # go back to go home
+    MoveToAngle(1800,1800,-600,-600) # run back home
+    MoveToAngle(0,180,0,-600) # turn to face home
+    MoveToAngle(1300,1300,-600,-600) # run back home
 
 
 def Run4():
@@ -168,11 +176,8 @@ def FinalRun():
     MoveToAngle(450, 450, 100, 100)
 
 
-# Run1()
+Run1()
 Run2()
-# Run3()
-# Run4()
-# FinalRun()
-# rightMedMotor.run(-1000)
-# time.sleep(1)
-# rightMedMotor.hold()
+Run3()
+Run4()
+FinalRun()
