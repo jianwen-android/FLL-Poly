@@ -74,6 +74,7 @@ def Run3():
     MoveToAngle(1250, 1250, 1000, 1000)
 
 def Run2():
+
     WriteOnScreen("Run 2 Ready")
     WaitForPress()
     WriteOnScreen("Launching")
@@ -94,27 +95,27 @@ def Run2():
     SinglePDTrackTillJunction(1, 12, 2, 50, -0.65, -10, -75)
     # parcel drop
     MoveToAngle(100,100,-500,-600)
-    MoveToAngle(60, 60, 200,200)# reverse from parcel
+    MoveToAngle(120, 120, 200,200)# reverse from parcel
     MoveToAngle(0,470,0,600) #turn back
-    MoveToAngle(445,445,800,1000) #wall align
+    MoveToAngle(550,550,1000,1000) #wall align
     MoveToAngle(0,140,0,-500) #turn towards line
     MoveToAngle(250,250,-500,-500)
     MoveToAngle(70,0,-500,0)
-    SinglePDTrackTillDegrees(200, 2, 50, 0.5, 10, -75) #trace to middle of the path
+    SinglePDTrackTillDegrees(350, 2, 50, 0.5, 10, -75) #trace to middle of the path
     rightMedMotor.run(1000) #turn down the attachment
+    leftMedMotor.run(-500) #drop the cargo
     time.sleep(0.8)
     rightMedMotor.hold()
+    leftMedMotor.hold()
     SinglePDTrackTillJunction(2, 12, 1, 50, 0.2, 4, -50) #linetrace to cargo sorter
     MoveToAngle(50,50,600,600) # go back to go home
     rightMedMotor.run(-500)
     time.sleep(2)
     rightMedMotor.hold()
     MoveToAngle(500,500,750,600) # go back to go home
-    MoveToAngle(300,0,-750,0) # go back to go home
-    MoveToAngle(1800,1800,-600,-600) # run back home
-    MoveToAngle(0,180,0,-600) # turn to face home
-    MoveToAngle(1300,1300,-600,-600) # run back home
-
+    MoveToAngle(320,0,-750,0) # go back to go home
+    MoveToAngle(2000,2000,-600,-670) # run back home
+    MoveToAngle(2000,2000,-660,-600) # run back home
 
 def Run4():
     WriteOnScreen("Run 4 Ready")
@@ -145,7 +146,13 @@ def Run4():
     # MoveToAngle(0,130,0,600)
     MoveToAngle(3000,3000,1000,1000)
 
-def FinalRun():
+def Run5():
+    WriteOnScreen("Run 5 Ready")
+    WaitForPress()
+    WriteOnScreen("Launching")
+    MoveToAngle(1000, 1000, -600, -600)
+
+def Run6():
     WriteOnScreen("Final Run Ready")
     WaitForPress()
     WriteOnScreen("Launching")
@@ -176,8 +183,9 @@ def FinalRun():
     MoveToAngle(450, 450, 100, 100)
 
 
-Run1()
-Run2()
-Run3()
-Run4()
-FinalRun()
+# Run1()
+# Run2()
+# Run3()
+# Run4()
+Run5()
+# Run6()
