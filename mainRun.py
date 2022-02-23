@@ -101,21 +101,23 @@ def Run2():
     MoveToAngle(0,140,0,-500) #turn towards line
     MoveToAngle(250,250,-500,-500)
     MoveToAngle(70,0,-500,0)
-    SinglePDTrackTillDegrees(250, 2, 50, 0.5, 10, -75) #trace to middle of the path
-    # rightMedMotor.run(1000) #turn down the attachment
-    # leftMedMotor.run(-500) #drop the cargo
-    # time.sleep(0.8)
-    # rightMedMotor.hold()
-    # leftMedMotor.hold()
-    # SinglePDTrackTillJunction(2, 12, 1, 50, 0.2, 4, -50) #linetrace to cargo sorter
-    # MoveToAngle(50,50,600,600) # go back to go home
-    # rightMedMotor.run(-500)
-    # time.sleep(2)
-    # rightMedMotor.hold()
-    # MoveToAngle(500,500,750,600) # go back to go home
-    # MoveToAngle(320,0,-750,0) # go back to go home
-    # MoveToAngle(2000,2000,-600,-670) # run back home
-    # MoveToAngle(2000,2000,-660,-600) # run back home
+    SinglePDTrackTillDegrees(100, 2, 50, 0.5, 10, -75) #trace to middle of the path
+    rightMedMotor.run(1000) #turn down the attachment
+    leftMedMotor.run(-500) #drop the cargo
+    time.sleep(1)
+    rightMedMotor.hold()
+    leftMedMotor.hold()
+    SinglePDTrackTillJunction(2, 12, 1, 50, 0.2, 4, -40) #linetrace to cargo sorter
+    MoveToAngle(50,50,600,600) # go back to go home
+    rightMedMotor.run(-500)
+    leftMedMotor.run(500)
+    time.sleep(2)
+    rightMedMotor.hold()
+    leftMedMotor.hold()
+    MoveToAngle(500,100,750,600) # go back to go home
+    MoveToAngle(320,0,-750,0) # go back to go home
+    MoveToAngle(2000,2000,-600,-670) # run back home
+    MoveToAngle(2000,2000,-660,-600) # run back home
 
 def Run4():
     WriteOnScreen("Run 4 Ready")
@@ -182,9 +184,10 @@ def Run6():
     MoveToAngle(450, 450, 100, 100)
 
 
-# Run1()
-Run2()
-# Run3()
-# Run4()
+Run1()
+# Run2()
+Run3()
+Run4()
 # Run5()
-# Run6()
+Run6()
+
