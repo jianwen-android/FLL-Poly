@@ -80,7 +80,7 @@ def Run2():
     WriteOnScreen("Launching")
     # leave quarter circle starting zone
     MoveToAngle(100, 100, -600, -600)
-    MoveToAngle(155, 0, -600, 0)
+    MoveToAngle(160, 0, -600, 0)
     MoveToAngle(300, 300, -600, -600)
     #linetrace to objective
     SinglePDTrackTillDegrees(1000, 3, 50, 0.65, 10, -75)
@@ -107,6 +107,7 @@ def Run2():
     time.sleep(1)
     rightMedMotor.hold()
     leftMedMotor.hold()
+    SinglePDTrackTillDegrees(200, 2, 50, 0.5, 10, -30)
     SinglePDTrackTillJunction(2, 12, 1, 50, 0.2, 4, -40) #linetrace to cargo sorter
     MoveToAngle(50,50,600,600) # go back to go home
     rightMedMotor.run(-500)
@@ -114,10 +115,10 @@ def Run2():
     time.sleep(2)
     rightMedMotor.hold()
     leftMedMotor.hold()
-    MoveToAngle(500,100,750,600) # go back to go home
-    MoveToAngle(320,0,-750,0) # go back to go home
-    MoveToAngle(2000,2000,-600,-670) # run back home
-    MoveToAngle(2000,2000,-660,-600) # run back home
+    MoveToAngle(550,550,600,600) # go back to go home
+    MoveToAngle(330,0,-750,0) # go back to go home
+    MoveToAngle(1800,1800,-600,-625) # run back home
+    MoveToAngle(2000,2000,-670,-600) # run back home
 
 def Run4():
     WriteOnScreen("Run 4 Ready")
@@ -184,10 +185,10 @@ def Run6():
     MoveToAngle(450, 450, 100, 100)
 
 
-Run1()
+# Run1()
 # Run2()
 Run3()
-Run4()
+# Run4()
 # Run5()
-Run6()
+# Run6()
 
