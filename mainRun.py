@@ -59,7 +59,7 @@ def Run3():
     WriteOnScreen("Run 3 Ready")
     WaitForPress()
     WriteOnScreen("Launching")
-    MoveToAngle(650, 650, -1000, -1000)
+    MoveToAngle(400, 400, -1000, -1000)
     SinglePDTrackTillDegrees(700, 3, 50, 0.65, 10, -75)
     SinglePDTrackTillDegrees(300, 3, 50, 0.4, 10, -75)
     SinglePDTrackTillJunction(2, 12, 3, 50, 0.65, 10, -75)
@@ -71,7 +71,11 @@ def Run3():
     leftMedMotor.run(1000)
     time.sleep(2)
     leftMedMotor.hold()
-    MoveToAngle(1250, 1250, 1000, 1000)
+    MoveToAngle(50, 50, 1000, 1000)
+    rightMedMotor.run(1000)
+    time.sleep(2)
+    MoveToAngle(1250, 1250, 1000, 990)
+    rightMedMotor.hold()
 
 def Run2():
 
@@ -122,12 +126,17 @@ def Run2():
 
 def Run4():
     WriteOnScreen("Run 4 Ready")
+    leftMedMotor.run(-10)
     WaitForPress()
     WriteOnScreen("Launching")
+    leftMedMotor.hold()
     MoveToAngle(100, 100, -600, -600)
-    MoveToAngle(155, 0, -600, 0)
-    MoveToAngle(300, 300, -600, -600)
-    SinglePDTrackTillDegrees(1000, 3, 50, 0.65, 10, -75)
+    MoveToAngle(175, 0, -600, 0)
+    MoveToAngle(200, 200, -600, -600)
+    SinglePDTrackTillDegrees(1100, 3, 50, 0.65, 10, -75)
+    leftMedMotor.run(900)
+    time.sleep(1.2)
+    leftMedMotor.hold()
     SinglePDTrackTillJunction(2, 12, 3, 50, 0.65, 10, -75)
     MoveToAngle(50, 50, -600, -600)
     SinglePDTrackTillJunction(2, 12, 3, 50, 0.65, 10, -75)
@@ -149,12 +158,6 @@ def Run4():
     MoveToAngle(1500,1500,-1000,-1000)
 
 def Run5():
-    WriteOnScreen("Run 5 Ready")
-    WaitForPress()
-    WriteOnScreen("Launching")
-    MoveToAngle(1000, 1000, -600, -600)
-
-def Run6():
     WriteOnScreen("Final Run Ready")
     WaitForPress()
     WriteOnScreen("Launching")
@@ -185,10 +188,9 @@ def Run6():
     MoveToAngle(450, 450, 100, 100)
 
 
-# Run1()
-# Run2()
+Run1()
+Run2()
 Run3()
-# Run4()
-# Run5()
-# Run6()
+Run4()
+Run5()
 
