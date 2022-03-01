@@ -131,9 +131,9 @@ def Run4():
     WriteOnScreen("Launching")
     leftMedMotor.hold()
     MoveToAngle(100, 100, -600, -600)
-    MoveToAngle(175, 0, -600, 0)
+    MoveToAngle(185, 0, -600, 0)
     MoveToAngle(200, 200, -600, -600)
-    SinglePDTrackTillDegrees(1100, 3, 50, 0.65, 10, -75)
+    SinglePDTrackTillDegrees(1100, 3, 50, 0.65, 10, -55)
     leftMedMotor.run(900)
     time.sleep(1.2)
     leftMedMotor.hold()
@@ -188,9 +188,9 @@ def Run5():
     MoveToAngle(450, 450, 100, 100)
 
 
-Run1()
-Run2()
-Run3()
+# Run1()
+# Run2()
+# Run3()
 Run4()
-Run5()
+# Run5()
 
