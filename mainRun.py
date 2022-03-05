@@ -192,6 +192,10 @@ def Run5():
 # Run1()
 # Run2()
 # Run3()
-Run4()
+# Run4()
 # Run5()
-
+WriteOnScreen("Run 4 Ready")
+WaitForPress()
+WriteOnScreen("Launching")
+MoveToAngle(2000,2000,1000,1000)
+MoveToAngle(600,600,-700,-700)
