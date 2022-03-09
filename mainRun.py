@@ -197,6 +197,36 @@ def Run5():
 WriteOnScreen("Run 4 Ready")
 WaitForPress()
 WriteOnScreen("Launching")
-MoveToAngle(6000,6000,1000,1000)
-MoveToAngle(1600,1600,400,400)
-MoveToAngle(600,600,-700,-700)
+# MoveToAngle(6000,6000,1000,1000)
+# MoveToAngle(1600,1600,400,400)
+MoveToAngle(500,500,-700,-700)
+MoveToAngle(100,100,300,300)
+MoveToAngle(200,0,-700,0)
+SinglePDTrackTillJunction(1, 12, 2, 50, -0.65, -10, -75)
+# parcel drop
+MoveToAngle(100,100,-500,-600)
+MoveToAngle(120, 120, 200,200)# reverse from parcel
+MoveToAngle(0,470,0,600) #turn back
+MoveToAngle(550,550,1000,1000) #wall align
+MoveToAngle(0,140,0,-500) #turn towards line
+MoveToAngle(250,250,-500,-500)
+MoveToAngle(70,0,-500,0)
+SinglePDTrackTillDegrees(100, 2, 50, 0.5, 10, -75) #trace to middle of the path
+rightMedMotor.run(1000) #turn down the attachment
+leftMedMotor.run(-500) #drop the cargo
+time.sleep(1)
+rightMedMotor.hold()
+leftMedMotor.hold()
+SinglePDTrackTillDegrees(200, 2, 50, 0.5, 10, -30)
+SinglePDTrackTillJunction(2, 12, 1, 50, 0.2, 4, -40) #linetrace to cargo sorter
+MoveToAngle(70,70,600,600) # give spacing
+rightMedMotor.run(-500)
+time.sleep(1)
+rightMedMotor.hold()
+MoveToAngle(550,550,600,600) # go back to go home
+# MoveToAngle(330,0,-750,0) # go back to go home
+# MoveToAngle(1800,1800,-600,-625) # run back home
+# MoveToAngle(2000,2000,-670,-600) # run back home
+rightMedMotor.run(-500)
+time.sleep(0.5)
+rightMedMotor.hold()
