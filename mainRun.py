@@ -232,9 +232,9 @@ def ActualRun1():
     time.sleep(0.5)
     rightMedMotor.hold()
 
-# ActualRun1()
+ActualRun1()
 ## Run1()
 ## Run2()
-Run3()
+# Run3()
 # Run4()
 # Run5()
