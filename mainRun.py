@@ -175,7 +175,7 @@ def Run5():
     SinglePDTrackTillJunction(2, 12, 3, 50, 0.65, 10, -75)
     MoveToAngle(50, 50, -600, -600)
     SinglePDTrackTillJunction(2, 12, 3, 50, 0.65, 10, -75)
-    MoveToAngle(0, 340, 0, -600)
+    MoveToAngle(0, 360, 0, -600)
     while leftSensor.reflection() > 15:
         rightMotor.run(-300)
         leftMotor.run(-300)
@@ -198,24 +198,23 @@ def ActualRun1():
     WriteOnScreen("Run 1 Ready")
     WaitForPress()
     WriteOnScreen("Launching")
-    MoveToAngle(6000,6000,1000,1000)
-    MoveToAngle(1400,1400,400,400)
-    MoveToAngle(500,500,-700,-700)
-    MoveToAngle(100,100,300,300)
-    MoveToAngle(200,0,-700,0)
+    MoveToAngle(8000,8000,1000,1000)
+    MoveToAngle(550,550,-1000,-1000)
+    MoveToAngle(200,200,200,200)
+    MoveToAngle(150,0,-700,0)
     SinglePDTrackTillJunction(1, 12, 2, 50, -0.65, -10, -75)
     # parcel drop
     MoveToAngle(100,100,-500,-600)
     MoveToAngle(120, 120, 200,200)# reverse from parcel
-    MoveToAngle(0,470,0,600) #turn back
+    MoveToAngle(0,490,0,600) #turn back
     MoveToAngle(550,550,1000,1000) #wall align
     MoveToAngle(0,140,0,-500) #turn towards line
-    MoveToAngle(250,250,-500,-500)
-    MoveToAngle(70,0,-500,0)
+    MoveToAngle(260,260,-500,-500)
+    MoveToAngle(80,0,-500,0)
     SinglePDTrackTillDegrees(100, 2, 50, 0.5, 10, -75) #trace to middle of the path
     rightMedMotor.run(1000) #turn down the attachment
     leftMedMotor.run(-500) #drop the cargo
-    time.sleep(1)
+    time.sleep(0.8)
     rightMedMotor.hold()
     leftMedMotor.hold()
     SinglePDTrackTillDegrees(200, 2, 50, 0.5, 10, -30)
@@ -233,8 +232,9 @@ def ActualRun1():
     rightMedMotor.hold()
 
 ActualRun1()
+Run3()
+Run4()
+Run5()
+
 ## Run1()
 ## Run2()
-# Run3()
-# Run4()
-# Run5()
