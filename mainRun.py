@@ -169,7 +169,7 @@ def Run5():
     WaitForPress()
     WriteOnScreen("Launching")
     MoveToAngle(100, 100, -600, -600)
-    MoveToAngle(160, 0, -600, 0)
+    MoveToAngle(170, 0, -600, 0)
     MoveToAngle(300, 300, -600, -600)
     SinglePDTrackTillDegrees(1000, 3, 50, 0.75, 10, -75)
     SinglePDTrackTillJunction(2, 12, 3, 50, 0.5, 10, -75)
