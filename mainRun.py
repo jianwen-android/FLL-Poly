@@ -59,17 +59,11 @@ def Run3():
     WriteOnScreen("Run 3 Ready")
     WaitForPress()
     WriteOnScreen("Launching")
-    MoveToAngle(200, 200, -1000, -1000)
-    rightMedMotor.run(1000)
-    time.sleep(1.5)
-    rightMedMotor.run(-1000)
-    time.sleep(1)
-    rightMedMotor.hold()
-    MoveToAngle(200, 200, -1000, -1000)
+    MoveToAngle(400, 400, -1000, -1000)
     SinglePDTrackTillDegrees(700, 3, 50, 0.65, 10, -60)
     SinglePDTrackTillDegrees(300, 3, 50, 0.4, 10, -60)
     SinglePDTrackTillJunction(2, 12, 3, 50, 0.65, 10, -60)
-    MoveToAngle(190, 190, -500, -500)
+    MoveToAngle(190, 190, -800, -800)
     while leftSensor.reflection() != 11:
         leftMotor.dc(50)
         rightMotor.dc(50)
@@ -80,7 +74,7 @@ def Run3():
     MoveToAngle(70, 70, 1000, 1000)
     rightMedMotor.run(1000)
     time.sleep(2)
-    MoveToAngle(1250, 1250, 700, 680)
+    MoveToAngle(1200, 1200, 1000, 1000)
     rightMedMotor.run(-1000)
     time.sleep(1)
     rightMedMotor.hold()
@@ -138,9 +132,9 @@ def Run4():
     WriteOnScreen("Launching")
     leftMedMotor.hold()
     MoveToAngle(120, 120, -600, -600)
-    MoveToAngle(230, 0, -600, 0)
+    MoveToAngle(210, 0, -600, 0)
     MoveToAngle(200, 200, -600, -600)
-    SinglePDTrackTillDegrees(1300, 3, 50, 0.65, 10, -55)
+    SinglePDTrackTillDegrees(1200, 3, 50, 0.65, 10, -55)
     leftMedMotor.run(900)
     time.sleep(1.2)
     leftMedMotor.hold()
@@ -158,11 +152,10 @@ def Run4():
     rightMedMotor.run(-1000)
     MoveToAngle(700,700,700,700)
     rightMedMotor.hold()
-    MoveToAngle(280,280,600,-600) #turn to face line
+    MoveToAngle(290,290,600,-600) #turn to face line
     SinglePDTrackTillDegrees(500, 1, 50, -0.5, -10, -60)
-    MoveToAngle(0,40,0,-600)
-    SinglePDTrackTillDegrees(1500, 1, 50, 0.5, 10, -60)
-    MoveToAngle(1000,1000,-1000,-1000)
+    MoveToAngle(0,50,0,-600)
+    MoveToAngle(2000,2000,-1000,-1000)
 
 def Run5():
     WriteOnScreen("Final Run Ready")
@@ -200,7 +193,7 @@ def ActualRun1():
     WriteOnScreen("Run 1 Ready")
     WaitForPress()
     WriteOnScreen("Launching")
-    MoveToAngle(8000,8000,1000,1000)
+    MoveToAngle(1000,1000,1000,1000)
     MoveToAngle(550,550,-1000,-1000)
     MoveToAngle(200,200,200,200)
     MoveToAngle(150,0,-700,0)
@@ -213,30 +206,36 @@ def ActualRun1():
     MoveToAngle(0,140,0,-500) #turn towards line
     MoveToAngle(250,250,-500,-500)
     MoveToAngle(80,0,-500,0)
-    SinglePDTrackTillDegrees(100, 2, 50, 0.5, 10, -75) #trace to middle of the path
+    SinglePDTrackTillDegrees(90, 2, 50, 0.5, 10, -75) #trace to middle of the path
     rightMedMotor.run(1000) #turn down the attachment
     leftMedMotor.run(-500) #drop the cargo
     time.sleep(0.8)
     rightMedMotor.hold()
     leftMedMotor.hold()
-    SinglePDTrackTillDegrees(200, 2, 50, 0.5, 10, -30)
-    SinglePDTrackTillJunction(2, 12, 1, 50, 0.2, 4, -40) #linetrace to cargo sorter
-    MoveToAngle(50,50,600,600) # give spacing
+    # SinglePDTrackTillDegrees(200, 2, 50, 0.5, 10, -30)
+    SinglePDTrackTillJunction(2, 12, 1, 50, 0.2, 4, -70) #linetrace to cargo sorter
+    MoveToAngle(50,50,1000,1000) # give spacing=
     rightMedMotor.run(-1000)
     time.sleep(0.5)
     rightMedMotor.hold()
-    MoveToAngle(550,550,600,600) # go back to go home
-    # MoveToAngle(330,0,-750,0) # go back to go home
-    # MoveToAngle(1800,1800,-600,-625) # run back home
-    # MoveToAngle(2000,2000,-670,-600) # run back home
+    MoveToAngle(150,0,1000,0)
     rightMedMotor.run(-500)
-    time.sleep(0.5)
+    MoveToAngle(1200,1200,1000,1000) # go back to go home
     rightMedMotor.hold()
+    MoveToAngle(310,310,-1000,-1000) # go back to go home
+    MoveToAngle(230,0,-1000,0)
+    SinglePDTrackTillDegrees(600, 1, 50, 0.65, 10, -80)
+    MoveToAngle(80,0,-1000,0)
+    SinglePDTrackTillDegrees(800, 1, 50, -0.5, -10, -80)
+    MoveToAngle(0,80,0,-1000)
+    SinglePDTrackTillDegrees(600, 1, 50, 0.65, 10, -80)
+    MoveToAngle(1500,1500,-1000,-600) # go back to go home
+    
 
-ActualRun1()
+# ActualRun1()
 Run3()
-Run4()
-Run5()
+# Run4()
+# Run5()
 
 ## Run1()
 ## Run2()
